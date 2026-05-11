@@ -59,6 +59,8 @@ const categoryLabel = {
   other: "その他",
 };
 
+const STORAGE_KEY = "quest-task-app:quests";
+
 export default function Home() {
   // 入力欄に入力されたクエスト名を管理する
   const [questTitle, setQuestTitle] = useState("");
@@ -91,10 +93,15 @@ export default function Home() {
 
   // ページを開いたあとに、LocalStorageからクエスト一覧を読み込む
   useEffect(() => {
-    const savedQuests = localStorage.getItem("quests");
+    const savedQuests = localStorage.getItem(STORAGE_KEY);
 
     if (savedQuests) {
-      setQuests(JSON.parse(savedQuests));
+      try {
+        setQuests(JSON.parse(savedQuests));
+      } catch {
+        console.error("LocalStorageのデータ読み込みに失敗しました");
+        setQuests([]);
+      }
     }
 
     setIsLoaded(true);
@@ -106,7 +113,7 @@ export default function Home() {
       return;
     }
 
-    localStorage.setItem("quests", JSON.stringify(quests));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(quests));
   }, [quests, isLoaded]);
 
   // 追加ボタンを押したときに実行する処理
