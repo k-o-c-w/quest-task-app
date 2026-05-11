@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 
 import QuestItem from "@/components/QuestItem";
 
+import QuestForm from "@/components/QuestForm";
+
 import StatusCard from "@/components/StatusCard";
 
 // 難易度の種類を決める
@@ -312,64 +314,17 @@ export default function Home() {
           rankTitle={rankTitle}
         />
 
-        <div className="rounded-lg bg-slate-900 p-4 mb-6">
-          <h2 className="text-xl font-bold mb-4">クエスト追加</h2>
-
-          <div className="space-y-3">
-            <input
-              type="text"
-              value={questTitle}
-              onChange={(e) => setQuestTitle(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.nativeEvent.isComposing) {
-                  return;
-                }
-
-                if (e.key === "Enter") {
-                  handleAddQuest();
-                }
-              }}
-              placeholder="例：Reactの復習をする"
-              className="w-full rounded-md bg-white px-3 py-2 text-slate-900 placeholder:text-slate-500"
-            />
-
-            <select
-              value={difficulty}
-              onChange={(e) => setDifficulty(e.target.value as Difficulty)}
-              className="w-full rounded-md bg-white px-3 py-2 text-slate-900"
-            >
-              <option value="easy">かんたん：10EXP</option>
-              <option value="normal">ふつう：30EXP</option>
-              <option value="hard">むずかしい：50EXP</option>
-            </select>
-
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value as Category)}
-              className="w-full rounded-md bg-white px-3 py-2 text-slate-900"
-            >
-              <option value="study">学習</option>
-              <option value="development">開発</option>
-              <option value="work">仕事</option>
-              <option value="life">生活</option>
-              <option value="other">その他</option>
-            </select>
-
-            <input
-              type="date"
-              value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
-              className="w-full rounded-md bg-white px-3 py-2 text-slate-900"
-            />
-
-            <button
-              onClick={handleAddQuest}
-              className="w-full rounded-md bg-purple-600 px-4 py-2 font-bold hover:bg-purple-700"
-            >
-              クエストを追加
-            </button>
-          </div>
-        </div>
+<QuestForm
+  questTitle={questTitle}
+  difficulty={difficulty}
+  category={category}
+  dueDate={dueDate}
+  setQuestTitle={setQuestTitle}
+  setDifficulty={setDifficulty}
+  setCategory={setCategory}
+  setDueDate={setDueDate}
+  handleAddQuest={handleAddQuest}
+/>
 
         <section className="rounded-lg bg-slate-900 p-4">
           <h2 className="text-xl font-bold mb-4">クエスト一覧</h2>
