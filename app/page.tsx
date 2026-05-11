@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 
 import QuestItem from "@/components/QuestItem";
 
+import StatusCard from "@/components/StatusCard";
+
 // 難易度の種類を決める
 // easy / normal / hard 以外は入れられないようにする
 type Difficulty = "easy" | "normal" | "hard";
@@ -301,41 +303,14 @@ export default function Home() {
         <p className="text-slate-300 mb-6">
           今日のタスクをクエストとして登録しよう。
         </p>
-        <div className="mb-6 rounded-lg bg-slate-900 p-4">
-          <h2 className="mb-2 text-xl font-bold">ステータス</h2>
 
-          <p className="text-slate-300">
-            合計EXP：
-            <span className="font-bold text-purple-300">{totalExp}</span>
-          </p>
-          <p className="text-slate-300">
-            レベル：
-            <span className="font-bold text-purple-300">Lv.{level}</span>
-          </p>
-          <p className="text-slate-300">
-            次のレベルまで：
-            <span className="font-bold text-purple-300">
-              {expToNextLevel}
-            </span>{" "}
-            EXP
-          </p>
-          <p className="text-slate-300">
-            称号：<span className="font-bold text-purple-300">{rankTitle}</span>
-          </p>
-          <div className="mt-3">
-            <div className="mb-1 flex justify-between text-sm text-slate-300">
-              <span>次のレベルまでの進捗</span>
-              <span>{progressPercent}%</span>
-            </div>
-
-            <div className="h-3 rounded-full bg-slate-700">
-              <div
-                className="h-3 rounded-full bg-purple-500"
-                style={{ width: `${progressPercent}%` }}
-              />
-            </div>
-          </div>
-        </div>
+        <StatusCard
+          totalExp={totalExp}
+          level={level}
+          expToNextLevel={expToNextLevel}
+          progressPercent={progressPercent}
+          rankTitle={rankTitle}
+        />
 
         <div className="rounded-lg bg-slate-900 p-4 mb-6">
           <h2 className="text-xl font-bold mb-4">クエスト追加</h2>
