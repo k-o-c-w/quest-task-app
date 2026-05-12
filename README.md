@@ -3,6 +3,10 @@
 ## 公開URL
 https://quest-task-app.vercel.app/
 
+## スクリーンショット
+
+![アプリ画面](./public/screenshot.png)
+
 ## 概要
 タスクをクエストとして登録し、完了することでEXPを獲得できるタスク管理アプリです。
 Next.js / TypeScript / React の学習を目的として作成しました。
