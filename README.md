@@ -42,3 +42,17 @@ Next.js / TypeScript / React の学習を目的として作成しました。
 - スマホ表示の改善
 - DB保存
 - ログイン機能
+
+## コンポーネント構成
+
+現在、以下のようにコンポーネントを分割しています。
+
+```txt
+app/
+  page.tsx
+
+components/
+  QuestForm.tsx
+  QuestFilter.tsx
+  QuestItem.tsx
+  StatusCard.tsx
