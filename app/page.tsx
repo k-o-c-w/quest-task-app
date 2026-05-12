@@ -10,6 +10,8 @@ import QuestForm from "@/components/QuestForm";
 
 import StatusCard from "@/components/StatusCard";
 
+import QuestFilter from "@/components/QuestFilter";
+
 // 難易度の種類を決める
 // easy / normal / hard 以外は入れられないようにする
 type Difficulty = "easy" | "normal" | "hard";
@@ -314,54 +316,25 @@ export default function Home() {
           rankTitle={rankTitle}
         />
 
-<QuestForm
-  questTitle={questTitle}
-  difficulty={difficulty}
-  category={category}
-  dueDate={dueDate}
-  setQuestTitle={setQuestTitle}
-  setDifficulty={setDifficulty}
-  setCategory={setCategory}
-  setDueDate={setDueDate}
-  handleAddQuest={handleAddQuest}
-/>
+        <QuestForm
+          questTitle={questTitle}
+          difficulty={difficulty}
+          category={category}
+          dueDate={dueDate}
+          setQuestTitle={setQuestTitle}
+          setDifficulty={setDifficulty}
+          setCategory={setCategory}
+          setDueDate={setDueDate}
+          handleAddQuest={handleAddQuest}
+        />
 
         <section className="rounded-lg bg-slate-900 p-4">
           <h2 className="text-xl font-bold mb-4">クエスト一覧</h2>
-          <div className="mb-4 flex gap-2">
-            <button
-              onClick={() => setFilterStatus("all")}
-              className={`rounded-md px-3 py-1 text-sm font-bold ${
-                filterStatus === "all"
-                  ? "bg-purple-600"
-                  : "bg-slate-700 hover:bg-slate-600"
-              }`}
-            >
-              すべて
-            </button>
-
-            <button
-              onClick={() => setFilterStatus("active")}
-              className={`rounded-md px-3 py-1 text-sm font-bold ${
-                filterStatus === "active"
-                  ? "bg-purple-600"
-                  : "bg-slate-700 hover:bg-slate-600"
-              }`}
-            >
-              未完了
-            </button>
-
-            <button
-              onClick={() => setFilterStatus("completed")}
-              className={`rounded-md px-3 py-1 text-sm font-bold ${
-                filterStatus === "completed"
-                  ? "bg-purple-600"
-                  : "bg-slate-700 hover:bg-slate-600"
-              }`}
-            >
-              完了済み
-            </button>
-          </div>
+          
+          <QuestFilter
+            filterStatus={filterStatus}
+            setFilterStatus={setFilterStatus}
+          />
           {filteredQuests.length === 0 ? (
             <p className="text-slate-400">まだクエストがありません。</p>
           ) : (
