@@ -11,6 +11,7 @@ type Quest = {
   exp: number;
   createdAt: string;
   dueDate: string;
+  focusMinutes?: number;
 };
 
 type QuestItemProps = {
@@ -131,6 +132,10 @@ export default function QuestItem({
             {isOverdue(quest) && (
               <span className="ml-2 font-bold text-red-300">期限切れ</span>
             )}
+          </div>
+
+          <div className="text-sm text-slate-300">
+            集中時間：{quest.focusMinutes ?? 0}分
           </div>
 
           <button

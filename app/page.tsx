@@ -12,6 +12,8 @@ import StatusCard from "@/components/StatusCard";
 
 import QuestFilter from "@/components/QuestFilter";
 
+import FocusTimer from "@/components/FocusTimer";
+
 // 難易度の種類を決める
 // easy / normal / hard 以外は入れられないようにする
 type Difficulty = "easy" | "normal" | "hard";
@@ -43,6 +45,8 @@ type Quest = {
   createdAt: string;
 
   dueDate: string;
+
+  focusMinutes: number;
 };
 
 // 難易度ごとの経験値を決める
@@ -141,6 +145,7 @@ export default function Home() {
       completed: false,
       exp: difficultyExp[difficulty],
       createdAt: new Date().toISOString(),
+      focusMinutes: 0,
     };
 
     // 今までのクエスト一覧に、新しいクエストを追加する
@@ -225,6 +230,7 @@ export default function Home() {
         dueDate: editingDueDate,
         exp: difficultyExp[editingDifficulty],
       };
+
     });
 
     setQuests(newQuests);
@@ -234,6 +240,25 @@ export default function Home() {
     setEditingCategory("study");
     setEditingDueDate("");
   };
+
+  
+    // 集中タイマー完了時に、指定したクエストへ集中時間を加算する処理
+const handleAddFocusMinutes = (questId: string, minutes: number) => {
+  const newQuests = quests.map((quest) => {
+    // 対象ではないクエストはそのまま返す
+    if (quest.id !== questId) {
+      return quest;
+    }
+
+    // 対象クエストだけ focusMinutes を加算する
+    return {
+      ...quest,
+      focusMinutes: (quest.focusMinutes ?? 0) + minutes,
+    };
+  });
+
+  setQuests(newQuests);
+};
 
   // 表示するクエストを絞り込む
   const filteredQuests = quests.filter((quest) => {
@@ -316,6 +341,7 @@ export default function Home() {
           rankTitle={rankTitle}
         />
 
+        <FocusTimer quests={quests} onAddFocusMinutes={handleAddFocusMinutes} />
         <QuestForm
           questTitle={questTitle}
           difficulty={difficulty}
@@ -330,7 +356,7 @@ export default function Home() {
 
         <section className="rounded-lg bg-slate-900 p-4">
           <h2 className="text-xl font-bold mb-4">クエスト一覧</h2>
-          
+
           <QuestFilter
             filterStatus={filterStatus}
             setFilterStatus={setFilterStatus}
