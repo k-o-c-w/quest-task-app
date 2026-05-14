@@ -46,7 +46,7 @@ type Quest = {
 
   dueDate: string;
 
-  focusMinutes: number;
+  focusMinutes?: number;
 };
 
 // 難易度ごとの経験値を決める
@@ -230,7 +230,6 @@ export default function Home() {
         dueDate: editingDueDate,
         exp: difficultyExp[editingDifficulty],
       };
-
     });
 
     setQuests(newQuests);
@@ -241,24 +240,23 @@ export default function Home() {
     setEditingDueDate("");
   };
 
-  
-    // 集中タイマー完了時に、指定したクエストへ集中時間を加算する処理
-const handleAddFocusMinutes = (questId: string, minutes: number) => {
-  const newQuests = quests.map((quest) => {
-    // 対象ではないクエストはそのまま返す
-    if (quest.id !== questId) {
-      return quest;
-    }
+  // 集中タイマー完了時に、指定したクエストへ集中時間を加算する処理
+  const handleAddFocusMinutes = (questId: string, minutes: number) => {
+    const newQuests = quests.map((quest) => {
+      // 対象ではないクエストはそのまま返す
+      if (quest.id !== questId) {
+        return quest;
+      }
 
-    // 対象クエストだけ focusMinutes を加算する
-    return {
-      ...quest,
-      focusMinutes: (quest.focusMinutes ?? 0) + minutes,
-    };
-  });
+      // 対象クエストだけ focusMinutes を加算する
+      return {
+        ...quest,
+        focusMinutes: (quest.focusMinutes ?? 0) + minutes,
+      };
+    });
 
-  setQuests(newQuests);
-};
+    setQuests(newQuests);
+  };
 
   // 表示するクエストを絞り込む
   const filteredQuests = quests.filter((quest) => {
@@ -276,10 +274,27 @@ const handleAddFocusMinutes = (questId: string, minutes: number) => {
     return true;
   });
 
-  // 完了済みクエストの経験値だけを合計する
-  const totalExp = quests
+  // 完了済みクエストのEXP合計
+  const completedExp = quests
     .filter((quest) => quest.completed)
     .reduce((sum, quest) => sum + quest.exp, 0);
+
+  // 集中時間によるEXP合計
+  // 今回は「集中1分 = 1EXP」として計算する
+  const focusExp = quests.reduce(
+    (sum, quest) => sum + (quest.focusMinutes ?? 0),
+    0,
+  );
+
+  // 全クエストの集中時間を合計する
+  const totalFocusMinutes = quests.reduce(
+    (sum, quest) => sum + (quest.focusMinutes ?? 0),
+    0,
+  );
+
+
+  // 完了EXP + 集中EXP を合計EXPにする
+  const totalExp = completedExp + focusExp;
 
   // 合計EXPから現在のレベルを計算する
   const level = Math.floor(totalExp / 100) + 1;
@@ -335,6 +350,9 @@ const handleAddFocusMinutes = (questId: string, minutes: number) => {
 
         <StatusCard
           totalExp={totalExp}
+          completedExp={completedExp}
+          focusExp={focusExp}
+          totalFocusMinutes={totalFocusMinutes}
           level={level}
           expToNextLevel={expToNextLevel}
           progressPercent={progressPercent}

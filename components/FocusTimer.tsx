@@ -39,7 +39,6 @@ export default function FocusTimer({
   quests,
   onAddFocusMinutes,
 }: FocusTimerProps) {
-
   // 今が集中時間か休憩時間かを管理する
   const [mode, setMode] = useState<FocusMode>("focus");
 
@@ -112,26 +111,49 @@ export default function FocusTimer({
     const timerId = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
-  setIsRunning(false);
+          return 0;
+        }
 
-  if (mode === "focus") {
-    if (selectedQuestId) {
-      onAddFocusMinutes(selectedQuestId, focusMinutes);
-    }
-
-    setMode("break");
-    return breakMinutes * 60;
-  }
-
-  setMode("focus");
-  return focusMinutes * 60;
-}
         return prev - 1;
       });
     }, 1000);
 
     return () => clearInterval(timerId);
   }, [isRunning]);
+
+  // タイマーが0になったときの処理
+  useEffect(() => {
+    if (!isRunning) {
+      return;
+    }
+
+    if (timeLeft !== 0) {
+      return;
+    }
+
+    setIsRunning(false);
+
+    if (mode === "focus") {
+      if (selectedQuestId) {
+        onAddFocusMinutes(selectedQuestId, focusMinutes);
+      }
+
+      setMode("break");
+      setTimeLeft(breakMinutes * 60);
+      return;
+    }
+
+    setMode("focus");
+    setTimeLeft(focusMinutes * 60);
+  }, [
+    timeLeft,
+    isRunning,
+    mode,
+    selectedQuestId,
+    focusMinutes,
+    breakMinutes,
+    onAddFocusMinutes,
+  ]);
 
   const activeQuests = quests.filter((quest) => !quest.completed);
 
@@ -183,7 +205,7 @@ export default function FocusTimer({
           <div className="flex flex-wrap gap-2">
             {focusOptions.map((option) => (
               <button
-                key={option.minutes}
+                key={`${option.label}-${option.minutes}`}
                 onClick={() => handleChangeFocusMinutes(option.minutes)}
                 className={`rounded-md px-3 py-1 text-sm font-bold ${
                   mode === "focus" && focusMinutes === option.minutes
@@ -203,7 +225,7 @@ export default function FocusTimer({
           <div className="flex flex-wrap gap-2">
             {breakOptions.map((option) => (
               <button
-                key={option.minutes}
+                key={`${option.label}-${option.minutes}`}
                 onClick={() => handleChangeBreakMinutes(option.minutes)}
                 className={`rounded-md px-3 py-1 text-sm font-bold ${
                   mode === "break" && breakMinutes === option.minutes
