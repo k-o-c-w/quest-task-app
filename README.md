@@ -69,6 +69,8 @@ components/
   QuestFilter.tsx
   QuestItem.tsx
   StatusCard.tsx
+  FocusTimer.tsx
+```
 
 ## 追加機能：Focus Quest
 
@@ -81,4 +83,3 @@ components/
 - タイマー完了時にクエストへ集中時間を加算
 - 集中時間をEXPに反映
 - 合計集中時間の表示
-```
